@@ -3,10 +3,16 @@ CSV_DELIM = ";"
 
 
 def main():
-    pass
+    data = getMeasurements()
+
+    assert len(data["H2O"][0]) % 20 == 0,  "Missing measurement in H2O"
+    assert len(data["pH"][0]) % 20 == 0,   "Missing measurement in pH"
+    assert len(data["NaCl"][0]) % 20 == 0, "Missing measurement in NaCl"
+
+    M_COUNT = len(data["H2O"][0]) // 20  # count of measurements
 
 
-def getMeasurements():
+def getMeasurements() -> dict:
     data = {"H2O": [[], []],  # [x-values, y-values]
             "pH": [[], []],
             "NaCl": [[], []]
