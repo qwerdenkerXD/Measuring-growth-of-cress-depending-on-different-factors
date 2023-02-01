@@ -33,6 +33,8 @@ def main():
     for i in range(2):
         subP = plot.subplot(121 + i)
         subP.title.set_text(["median", "arithmetic mean"][i])
+        plot.xlabel("Zeitpunkt in Tagen")
+        plot.ylabel("Wachstumshöhe in mm")
         subP.set_xticks([i for i in range(0, MAX_X, 60 * 24)])
         subP.set_xticklabels([i // (60 * 24) for i in range(0, MAX_X, 60 * 24)])
         subP.set_xlim(0, MAX_X)
@@ -41,6 +43,7 @@ def main():
         for medium in data:
             x_values, y_values = eval(["median", "arithMean"][i])[medium]
             subP.plot(x_values, y_values, marker="o", linestyle="-", label=medium)
+            plot.legend(loc="upper left")
 
     plot.savefig("Plot.png")
 
