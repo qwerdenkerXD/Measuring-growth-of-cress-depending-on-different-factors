@@ -39,11 +39,13 @@ def main():
         subP.set_xticklabels([i // (60 * 24) for i in range(0, MAX_X, 60 * 24)])
         subP.set_xlim(0, MAX_X)
         subP.set_ylim(0, MAX_Y)
+        addWatering(subP)
 
         for medium in data:
-            x_values, y_values = eval(["median", "arithMean"][i])[medium]
+            x_values, y_values = [median, arithMean][i][medium]
             subP.plot(x_values, y_values, marker="o", linestyle="-", label=medium)
             plot.legend(loc="upper left")
+
 
     plot.savefig("Plot.png")
 
@@ -78,6 +80,16 @@ def relTime(dateTime: "dd.mm.yyyy, hh:mm") -> "int of minutes":  # for correct p
     minutes = int(minutes) + 60 * hours - initMinutes
 
     return minutes
+
+
+def addWatering(plot) -> None:
+    with open("Watering.csv") as f:
+        f.readline()
+        label = "Watering"
+        for line in f:
+            dateTime, _ = line.split(CSV_DELIM)
+            plot.axvline(relTime(dateTime), label=label)
+            label = None
 
 
 if __name__ == '__main__':
