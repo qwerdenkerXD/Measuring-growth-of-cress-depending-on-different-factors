@@ -11,8 +11,13 @@ def main():
     assert len(data["pH"][0]) % 20 == 0,   "Missing measurement in pH"
     assert len(data["NaCl"][0]) % 20 == 0, "Missing measurement in NaCl"
 
-    M_COUNT = len(data["H2O"][0]) // 20  # count of measurements
+    plotScattered(data, "ScatterPlot")
 
+
+def plotScattered(data: dict, outFileName: str) -> "saves plot as png":
+    plot.clf()  # clear plot
+
+    M_COUNT = len(data["H2O"][0]) // 20  # count of measurements
     arithMean, median = {}, {}
     for medium in data:  # calculate medians and arith. means of data
         yArith, yMedian, xValues = [], [], []
@@ -26,7 +31,6 @@ def main():
         arithMean[medium] = [xValues, yArith]
         median[medium] = [xValues, yMedian]
 
-    # plot
     MAX_X = data["H2O"][0][-1]
     MAX_Y = max(data["H2O"][1])
 
@@ -46,8 +50,7 @@ def main():
             subP.plot(x_values, y_values, marker="o", linestyle="-", label=medium)
             plot.legend(loc="upper left")
 
-
-    plot.savefig("Plot.png")
+    plot.savefig("%s.png" % outFileName)
 
 
 def getMeasurements() -> dict:
