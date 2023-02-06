@@ -36,11 +36,11 @@ def plotBoxed(data: dict, outFileName: str) -> "saves plot as png":
     fig, plots = plot.subplots(1, len(data))
     fig.set_size_inches(30,15)
     for medium, subP in zip(data, plots):
-        subP.title.set_text(medium)
+        subP.set_title(medium, fontdict={"fontsize": 25})
         subP.boxplot(data[medium], positions=pos, widths=400)
         subP.set_xlim(0, pos[-1]+210)
         subP.set_xticks([i for i in range(0, pos[-1], 60 * 24)])
-        subP.set_xticklabels([i // (60 * 24) for i in range(0, pos[-1], 60 * 24)])
+        subP.set_xticklabels([i // (60 * 24) for i in range(0, pos[-1], 60 * 24)], fontsize=15)
         addWatering(subP)
     plot.savefig("%s.png" % outFileName)
 
@@ -94,11 +94,11 @@ def plotScattered(data: dict, outFileName: str) -> "saves plot as png":
 
     for i in range(2):
         subP = plot.subplot(121 + i)
-        subP.title.set_text(["median", "arithmetic mean"][i])
-        plot.xlabel("Zeitpunkt in Tagen")
-        plot.ylabel("Wachstumshöhe in mm")
+        subP.set_title(["median", "arithmetic mean"][i], fontdict={"fontsize": 25})
+        plot.xlabel("Zeitpunkt in Tagen", fontsize=20)
+        plot.ylabel("Wachstumshöhe in mm", fontsize=20)
         subP.set_xticks([i for i in range(0, MAX_X, 60 * 24)])
-        subP.set_xticklabels([i // (60 * 24) for i in range(0, MAX_X, 60 * 24)])
+        subP.set_xticklabels([i // (60 * 24) for i in range(0, MAX_X, 60 * 24)], fontsize=15)
         subP.set_xlim(0, MAX_X)
         subP.set_ylim(0, MAX_Y)
         addWatering(subP)
@@ -106,7 +106,7 @@ def plotScattered(data: dict, outFileName: str) -> "saves plot as png":
         for medium in data:
             x_values, y_values = [median, arithMean][i][medium]
             subP.plot(x_values, y_values, marker="o", linestyle="-", label=medium)
-            plot.legend(loc="upper left")
+            plot.legend(loc="upper left", fontsize=15)
 
     plot.savefig("%s.png" % outFileName)
 
@@ -121,6 +121,8 @@ def getMeasurements() -> dict:
         for line in f:
             medium, dateTime, height, _ = line.split(CSV_DELIM)
             data[medium][0] += [relTime(dateTime)]
+            if height == "NA":
+                height = data[medium][1][-20]  # take NA values as its last measured value
             data[medium][1] += [int(height)]
 
     return data
