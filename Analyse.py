@@ -12,6 +12,34 @@ def main():
     assert len(data["NaCl"][0]) % 20 == 0, "Missing measurement in NaCl"
 
     plotScattered(data, "ScatterPlot")
+    makeRcompatible(data)  # writes a file for a script from the course
+
+
+def makeRcompatible(data: dict) -> "writes my_measurements.R":
+    M_COUNT = len(data["H2O"][0]) // 20  # count of measurements
+    y, x = {i: [] for i in data}, {i: [] for i in data}
+    for medium in data:
+        for j in range(20):
+            day = 1
+            arith = 0
+            days_measures = 0
+            for i in range(M_COUNT):
+                if data[medium][0][i*20 + j]//(24*60) >= day:
+                    y[medium] += [arith/days_measures]
+                    x[medium] += [day]
+                    day += 1
+                    arith = 0
+                    days_measures = 0
+                else:
+                    days_measures += 1
+                    arith += data[medium][1][i*20 + j]
+    # assert(day == 6)
+    with open("Analyse/my_measurements.csv", "w") as f:
+        f.write("Medium,Messtag,Wuchshöhe,Matrikelnummer\n")
+        for medium in data:
+            xy = sorted(zip(x[medium], y[medium]))
+            for xi, yi in xy:
+                f.write("%s,%s,%s,%s\n" % ({"H2O": "Normal", "pH": "Acidic", "NaCl": "Salty"}[medium], xi, yi, 2139315))
 
 
 def plotScattered(data: dict, outFileName: str) -> "saves plot as png":
