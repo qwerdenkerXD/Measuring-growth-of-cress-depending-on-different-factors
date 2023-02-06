@@ -36,12 +36,15 @@ def plotBoxed(data: dict, outFileName: str) -> "saves plot as png":
     fig, plots = plot.subplots(1, len(data))
     fig.set_size_inches(30,15)
     for medium, subP in zip(data, plots):
+        addWatering(subP)
         subP.set_title(medium, fontdict={"fontsize": 25})
-        subP.boxplot(data[medium], positions=pos, widths=400)
+        boxP = subP.boxplot(data[medium], positions=pos, widths=400, patch_artist=True, showmeans=True)
+        for box in boxP["boxes"]:
+            box.set_facecolor("white")
         subP.set_xlim(0, pos[-1]+210)
+        subP.set_ylim(-4, 80)
         subP.set_xticks([i for i in range(0, pos[-1], 60 * 24)])
         subP.set_xticklabels([i // (60 * 24) for i in range(0, pos[-1], 60 * 24)], fontsize=15)
-        addWatering(subP)
     plot.savefig("%s.png" % outFileName)
 
 
