@@ -38,7 +38,7 @@ def plotBoxed(data: dict, outFileName: str) -> "saves plot as png":
     for medium, subP in zip(data, plots):
         addWatering(subP)
         subP.set_title(medium, fontdict={"fontsize": 25})
-        boxP = subP.boxplot(data[medium], positions=pos, widths=400, patch_artist=True, showmeans=True)
+        boxP = subP.boxplot(data[medium], positions=pos, widths=400, patch_artist=True)
         for box in boxP["boxes"]:
             box.set_facecolor("white")
         subP.set_xlim(0, pos[-1]+210)
