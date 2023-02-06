@@ -11,8 +11,38 @@ def main():
     assert len(data["pH"][0]) % 20 == 0,   "Missing measurement in pH"
     assert len(data["NaCl"][0]) % 20 == 0, "Missing measurement in NaCl"
 
+    plotBoxed(data, "BoxPlot")
     plotScattered(data, "ScatterPlot")
     makeRcompatible(data)  # writes a file for a script from the course
+
+
+def plotBoxed(data: dict, outFileName: str) -> "saves plot as png":
+    plot.clf()
+
+    def splitData(data: dict) -> dict:
+        res = {i: [] for i in data}
+        for medium in data:
+            x, y = data[medium]
+            M_COUNT = len(x) // 20  # count of measurements
+            for i in range(M_COUNT):
+                res[medium] += [[]]
+                for j in range(20):
+                    res[medium][-1] += [y[i*20 + j]]
+        return res
+
+    M_COUNT = len(data["H2O"][0]) // 20  # count of measurements
+    pos = [data["H2O"][0][i * 20] for i in range(M_COUNT)]
+    data = splitData(data)
+    fig, plots = plot.subplots(1, len(data))
+    fig.set_size_inches(30,15)
+    for medium, subP in zip(data, plots):
+        subP.title.set_text(medium)
+        subP.boxplot(data[medium], positions=pos, widths=400)
+        subP.set_xlim(0, pos[-1]+210)
+        subP.set_xticks([i for i in range(0, pos[-1], 60 * 24)])
+        subP.set_xticklabels([i // (60 * 24) for i in range(0, pos[-1], 60 * 24)])
+        addWatering(subP)
+    plot.savefig("%s.png" % outFileName)
 
 
 def makeRcompatible(data: dict) -> "writes my_measurements.R":
