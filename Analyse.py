@@ -30,6 +30,15 @@ def plotBoxed(data: dict, outFileName: str) -> "saves plot as png":
                     res[medium][-1] += [y[i*20 + j]]
         return res
 
+    def findMax(data: dict) -> int:
+        maxV = -1
+        for medium in data:
+            maxInMedium = max(data[medium][1])
+            if maxV < maxInMedium:
+                maxV = maxInMedium
+        return maxV
+
+    MAX_V = findMax(data)
     M_COUNT = len(data["H2O"][0]) // 20  # count of measurements
     pos = [data["H2O"][0][i * 20] for i in range(M_COUNT)]
     data = splitData(data)
@@ -42,7 +51,7 @@ def plotBoxed(data: dict, outFileName: str) -> "saves plot as png":
         for box in boxP["boxes"]:
             box.set_facecolor("white")
         subP.set_xlim(0, pos[-1]+210)
-        subP.set_ylim(-4, 80)
+        subP.set_ylim(-4, MAX_V + 2)
         subP.set_xticks([i for i in range(0, pos[-1], 60 * 24)])
         subP.set_xticklabels([i // (60 * 24) for i in range(0, pos[-1], 60 * 24)], fontsize=15)
     plot.savefig("%s.png" % outFileName)
