@@ -66,15 +66,17 @@ def makeRcompatible(data: dict) -> "writes my_measurements.R":
             arith = 0
             days_measures = 0
             for i in range(M_COUNT):
-                if data[medium][0][i*20 + j]//(24*60) >= day:
+                if data[medium][0][i*20 + j]//(24*60) == day:
                     y[medium] += [arith/days_measures]
                     x[medium] += [day]
                     day += 1
-                    arith = 0
-                    days_measures = 0
+                    arith = data[medium][1][i*20 + j]
+                    days_measures = 1
                 else:
                     days_measures += 1
                     arith += data[medium][1][i*20 + j]
+            y[medium] += [arith/days_measures]
+            x[medium] += [day]
     # assert(day == 6)
     with open("Analyse/my_measurements.csv", "w") as f:
         f.write("Medium,Messtag,Wuchshöhe,Matrikelnummer\n")
