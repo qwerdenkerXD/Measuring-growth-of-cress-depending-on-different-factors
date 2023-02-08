@@ -3,14 +3,14 @@ from matplotlib import pyplot as plot
 INIT_DATE = 30, 1, 2023, 10, 27
 CSV_DELIM = ";"
 PATH_RESULTS = "Results/"
+MEDIUM_EQUIV = {"H2O": "Normal", "pH": "Acidic", "NaCl": "Salty"}
+MEDIUMS = list(MEDIUM_EQUIV.keys())
+SAMPLES_PER_MED = 20
+M_COUNT = None  # gets value in getMeasurements()
 
 
 def main():
     data = getMeasurements()
-
-    assert len(data["H2O"][0]) % 20 == 0,  "Missing measurement in H2O"
-    assert len(data["pH"][0]) % 20 == 0,   "Missing measurement in pH"
-    assert len(data["NaCl"][0]) % 20 == 0, "Missing measurement in NaCl"
 
     plotBoxed(data, "BoxPlot")
     plotScattered(data, "ScatterPlot")
@@ -24,11 +24,10 @@ def plotBoxed(data: dict, outFileName: str) -> "saves plot as png":
         res = {i: [] for i in data}
         for medium in data:
             x, y = data[medium]
-            M_COUNT = len(x) // 20  # count of measurements
             for i in range(M_COUNT):
                 res[medium] += [[]]
-                for j in range(20):
-                    res[medium][-1] += [y[i*20 + j]]
+                for j in range(SAMPLES_PER_MED):
+                    res[medium][-1] += [y[i * SAMPLES_PER_MED + j]]
         return res
 
     def findMax(data: dict) -> int:
@@ -40,11 +39,11 @@ def plotBoxed(data: dict, outFileName: str) -> "saves plot as png":
         return maxV
 
     MAX_V = findMax(data)
-    M_COUNT = len(data["H2O"][0]) // 20  # count of measurements
-    pos = [data["H2O"][0][i * 20] for i in range(M_COUNT)]
+    firstMediumData = data[MEDIUMS[0]]
+    pos = [firstMediumData[0][i * SAMPLES_PER_MED] for i in range(M_COUNT)]
     data = splitData(data)
     fig, plots = plot.subplots(1, len(data))
-    fig.set_size_inches(30,15)
+    fig.set_size_inches(30, 15)
     for medium, subP in zip(data, plots):
         addWatering(subP)
         subP.set_title(medium, fontdict={"fontsize": 25})
@@ -60,53 +59,57 @@ def plotBoxed(data: dict, outFileName: str) -> "saves plot as png":
 
 
 def makeRcompatible(data: dict) -> "writes my_measurements.R":
-    M_COUNT = len(data["H2O"][0]) // 20  # count of measurements
     y, x = {i: [] for i in data}, {i: [] for i in data}
     for medium in data:
-        for j in range(20):
+        for j in range(SAMPLES_PER_MED):
             day = 1
             arith = 0
             days_measures = 0
             for i in range(M_COUNT):
-                if data[medium][0][i*20 + j]//(24*60) == day:
+                if data[medium][0][i*SAMPLES_PER_MED + j]//(24*60) == day:
                     y[medium] += [arith/days_measures]
                     x[medium] += [day]
                     day += 1
-                    arith = data[medium][1][i*20 + j]
+                    arith = data[medium][1][i*SAMPLES_PER_MED + j]
                     days_measures = 1
                 else:
                     days_measures += 1
-                    arith += data[medium][1][i*20 + j]
+                    arith += data[medium][1][i*SAMPLES_PER_MED + j]
             y[medium] += [arith/days_measures]
             x[medium] += [day]
-    # assert(day == 6)
+
     with open("Analyse/my_measurements.csv", "w") as f:
         f.write("Medium,Messtag,Wuchshöhe,Matrikelnummer\n")
         for medium in data:
             xy = sorted(zip(x[medium], y[medium]))
             for xi, yi in xy:
-                f.write("%s,%s,%s,%s\n" % ({"H2O": "Normal", "pH": "Acidic", "NaCl": "Salty"}[medium], xi, yi, 2139315))
+                f.write("%s,%s,%s,%s\n" % (MEDIUM_EQUIV[medium], xi, yi, 2139315))
 
 
 def plotScattered(data: dict, outFileName: str) -> "saves plot as png":
     plot.clf()  # clear plot
 
-    M_COUNT = len(data["H2O"][0]) // 20  # count of measurements
     arithMean, median = {}, {}
+
     for medium in data:  # calculate medians and arith. means of data
         yArith, yMedian, xValues = [], [], []
 
         for i in range(M_COUNT):
-            xValues += [data[medium][0][i * 20]]
-            yData = sorted(data[medium][1][i * 20: i * 20 + 20])
-            yArith += [sum(yData) / 20]
-            yMedian += [(yData[9] + yData[10]) / 2]
+            xValues += [data[medium][0][i * SAMPLES_PER_MED]]
+            yData = sorted(data[medium][1][i * SAMPLES_PER_MED: i * SAMPLES_PER_MED + SAMPLES_PER_MED])
+            yArith += [sum(yData) / SAMPLES_PER_MED]
+            if SAMPLES_PER_MED % 2 == 0:
+                yMedian += [(yData[SAMPLES_PER_MED // 2 - 1] + yData[SAMPLES_PER_MED // 2]) / 2]
+            else:
+                yMedian += [(yData[SAMPLES_PER_MED // 2]) / 2]
 
         arithMean[medium] = [xValues, yArith]
         median[medium] = [xValues, yMedian]
 
-    MAX_X = data["H2O"][0][-1]
-    MAX_Y = max(data["H2O"][1])
+    firstMediumData = data[MEDIUMS[0]]
+    x, y = firstMediumData
+    MAX_X = x[-1]
+    MAX_Y = max(y)
 
     for i in range(2):
         subP = plot.subplot(121 + i)
@@ -128,18 +131,23 @@ def plotScattered(data: dict, outFileName: str) -> "saves plot as png":
 
 
 def getMeasurements() -> dict:
-    data = {"H2O": [[], []],  # [x-values, y-values]
-            "pH": [[], []],
-            "NaCl": [[], []]
-            }
+    global M_COUNT  # will be initialised with an integer
+
+    data = {medium: [[], []] for medium in MEDIUMS}  # [x-values, y-values]
+
     with open("Wuchshohen.csv") as f:
         f.readline()  # skip first line
         for line in f:
             medium, dateTime, height, _ = line.split(CSV_DELIM)
             data[medium][0] += [relTime(dateTime)]
             if height == "NA":
-                height = data[medium][1][-20]  # take NA values as its last measured value
+                height = data[medium][1][-SAMPLES_PER_MED]  # take NA values as its last measured value
             data[medium][1] += [int(height)]
+
+    for medium in data:
+        valueCount = len(data[medium][0])
+        assert valueCount % 20 == 0, "Missing measurement in %s" % medium
+        M_COUNT = valueCount // SAMPLES_PER_MED  # count of measurements
 
     return data
 
