@@ -32,7 +32,7 @@ plant.h.other.acidic <- plant.h.other[which(plant.h.other$Medium == "Acidic"), ]
 plant.h.my.norm <- plant.h.my[which(plant.h.my$Medium == "Normal"), ]
 plant.h.my.salty <- plant.h.my[which(plant.h.my$Medium == "Salty"), ]
 plant.h.my.acidic <- plant.h.my[which(plant.h.my$Medium == "Acidic"), ]
-png("scatterplot_my_vs_others.png", 1000, 1000)
+png("Results/scatterplot_my_vs_others.png", 1000, 1000)
 #' other's data:
 plot(x = plant.h.other.norm$Messtag, plant.h.other.norm$Wuchshöhe, pch = 21, col = "black",
     ylim = c(plant.h.all.min, plant.h.all.max), xlab = "Tag", ylab = "Wuchshöhe [mm]")

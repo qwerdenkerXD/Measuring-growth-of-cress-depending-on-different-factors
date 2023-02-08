@@ -2,6 +2,7 @@ from matplotlib import pyplot as plot
 
 INIT_DATE = 30, 1, 2023, 10, 27
 CSV_DELIM = ";"
+PATH_RESULTS = "Results/"
 
 
 def main():
@@ -54,7 +55,8 @@ def plotBoxed(data: dict, outFileName: str) -> "saves plot as png":
         subP.set_ylim(-4, MAX_V + 2)
         subP.set_xticks([i for i in range(0, pos[-1], 60 * 24)])
         subP.set_xticklabels([i // (60 * 24) for i in range(0, pos[-1], 60 * 24)], fontsize=15)
-    plot.savefig("%s.png" % outFileName)
+
+    plot.savefig("%s%s.png" % (PATH_RESULTS, outFileName))
 
 
 def makeRcompatible(data: dict) -> "writes my_measurements.R":
@@ -122,7 +124,7 @@ def plotScattered(data: dict, outFileName: str) -> "saves plot as png":
             subP.plot(x_values, y_values, marker="o", linestyle="-", label=medium)
             plot.legend(loc="upper left", fontsize=15)
 
-    plot.savefig("%s.png" % outFileName)
+    plot.savefig("%s%s.png" % (PATH_RESULTS, outFileName))
 
 
 def getMeasurements() -> dict:
