@@ -15,6 +15,18 @@ def main():
     plotBoxed(data, "BoxPlot")
     plotScattered(data, "ScatterPlot")
     makeRcompatible(data)  # writes a file for a script from the course
+    print("Degrees of Freedom: %d" % (len(data[MEDIUMS[0]][1]) - 2))
+    for medium in data:
+        print("t-value for %s and %s: %f" % (MEDIUMS[0], medium, t_test(data[MEDIUMS[0]][1], data[medium][1])))
+
+
+def t_test(dataM1: list("measurements Medium 1"), dataM2: list("measurements Medium 2")) -> float:
+    m, n = len(dataM1), len(dataM2)
+    arithM1 = sum(dataM1) / m
+    arithM2 = sum(dataM2) / n
+    weightedVariance = (sum([(x - arithM1) ** 2 for x in dataM1]) + sum([(x - arithM2) ** 2 for x in dataM2])) / (m + n - 2)
+
+    return (m * n / (m + n)) ** .5 * (arithM1 - arithM2) / (weightedVariance) ** .5
 
 
 def plotBoxed(data: dict, outFileName: str) -> "saves plot as png":
