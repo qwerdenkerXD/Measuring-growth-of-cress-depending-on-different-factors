@@ -15,18 +15,31 @@ def main():
     plotBoxed(data, "BoxPlot")
     plotScattered(data, "ScatterPlot")
     makeRcompatible(data)  # writes a file for a script from the course
-    print("Degrees of Freedom: %d" % (len(data[MEDIUMS[0]][1]) - 2))
+
+    normalData = data[MEDIUMS[0]][1][-SAMPLES_PER_MED:]
+    print("Degrees of Freedom: %d" % (2 * len(normalData) - 2))
     for medium in data:
-        print("t-value for %s and %s: %f" % (MEDIUMS[0], medium, t_test(data[MEDIUMS[0]][1], data[medium][1])))
+        t_value, hypTestRes = t_test(normalData, data[medium][1][-len(normalData):])
+        print("t-value for %s and %s: %f\n%s" % (MEDIUMS[0], medium, t_value, hypTestRes))
 
 
-def t_test(dataM1: list("measurements Medium 1"), dataM2: list("measurements Medium 2")) -> float:
+def t_test(dataM1: "measurements Medium 1", dataM2: "measurements Medium 2", t_dist_value=(None, None)) -> (float, str):
     m, n = len(dataM1), len(dataM2)
     arithM1 = sum(dataM1) / m
     arithM2 = sum(dataM2) / n
     weightedVariance = (sum([(x - arithM1) ** 2 for x in dataM1]) + sum([(x - arithM2) ** 2 for x in dataM2])) / (m + n - 2)
 
-    return (m * n / (m + n)) ** .5 * (arithM1 - arithM2) / (weightedVariance) ** .5
+    t_value = (m * n / (m + n)) ** .5 * (arithM1 - arithM2) / (weightedVariance) ** .5
+    hypTest = ""
+    if t_dist_value != (None, None):
+        quant95, quant975 = t_dist_value
+        if quant975:
+            hypTest += "E(X) = E(Y): %s\n" % ["akzeptiert", "abgelehnt, also E(X) != E(Y)"][t_value > quant975 or t_value < -quant975]
+        if quant95:
+            hypTest += "E(X) <= E(Y): %s\n" % ["akzeptiert", "abgelehnt, also E(X) > E(Y)"][t_value < -quant95]
+            hypTest += "E(X) >= E(Y): %s\n" % ["akzeptiert", "abgelehnt, also E(X) < E(Y)"][t_value > quant95]
+
+    return t_value, hypTest
 
 
 def plotBoxed(data: dict, outFileName: str) -> "saves plot as png":
