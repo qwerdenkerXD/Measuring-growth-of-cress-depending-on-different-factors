@@ -16,30 +16,50 @@ def main():
     plotScattered(data, "ScatterPlot")
     makeRcompatible(data)  # writes a file for a script from the course
 
-    normalData = data[MEDIUMS[0]][1][-SAMPLES_PER_MED:]
+    normalData = data[MEDIUMS[0]][1]
     print("Degrees of Freedom: %d" % (2 * len(normalData) - 2))
     for medium in data:
-        t_value, hypTestRes = t_test(normalData, data[medium][1][-len(normalData):])
-        print("t-value for %s and %s: %f\n%s" % (MEDIUMS[0], medium, t_value, hypTestRes))
+        t_value, hypTestRes = t_test(normalData, data[medium][1][-len(normalData):], (1.646, 1.962))
+        print("mean t-value for %s and %s: %f\n%s" % (MEDIUMS[0], medium, t_value, hypTestRes))
 
 
 def t_test(dataM1: "measurements Medium 1", dataM2: "measurements Medium 2", t_dist_value=(None, None)) -> (float, str):
-    m, n = len(dataM1), len(dataM2)
-    arithM1 = sum(dataM1) / m
-    arithM2 = sum(dataM2) / n
-    weightedVariance = (sum([(x - arithM1) ** 2 for x in dataM1]) + sum([(x - arithM2) ** 2 for x in dataM2])) / (m + n - 2)
-
-    t_value = (m * n / (m + n)) ** .5 * (arithM1 - arithM2) / (weightedVariance) ** .5
+    dataM1 = [dataM1[i*SAMPLES_PER_MED: (i+1)*SAMPLES_PER_MED] for i in range(len(dataM1) // SAMPLES_PER_MED)]
+    dataM2 = [dataM2[i*SAMPLES_PER_MED: (i+1)*SAMPLES_PER_MED] for i in range(len(dataM2) // SAMPLES_PER_MED)]
+    t_values = []
+    for X, Y in zip(dataM1, dataM2):
+        m, n = len(X), len(Y)
+        arithM1 = sum(X) / m
+        arithM2 = sum(Y) / n
+        weightedVariance = (sum([(x - arithM1) ** 2 for x in X]) + sum([(y - arithM2) ** 2 for y in Y])) / (m + n - 2)
+        if weightedVariance == 0:
+            t_values += [0]
+        else:
+            t_values += [(m * n / (m + n)) ** .5 * (arithM1 - arithM2) / (weightedVariance ** .5)]
     hypTest = ""
     if t_dist_value != (None, None):
         quant95, quant975 = t_dist_value
         if quant975:
-            hypTest += "E(X) = E(Y): %s\n" % ["akzeptiert", "abgelehnt, also E(X) != E(Y)"][t_value > quant975 or t_value < -quant975]
+            percentage = 0  # how much percent of the measurements contradict the hypothesis
+            for v in t_values:
+                percentage += v > quant975
+                percentage += v < -quant975
+            percentage = 100 * percentage / len(t_values)
+            hypTest += "E(X) = E(Y): in %.2f%% aller Messungen akzeptiert, in %.2f%% abgelehnt\n" % (100-percentage, percentage)
         if quant95:
-            hypTest += "E(X) <= E(Y): %s\n" % ["akzeptiert", "abgelehnt, also E(X) > E(Y)"][t_value < -quant95]
-            hypTest += "E(X) >= E(Y): %s\n" % ["akzeptiert", "abgelehnt, also E(X) < E(Y)"][t_value > quant95]
+            percentage = 0  # how much percent of the measurements contradict the hypothesis
+            for v in t_values:
+                percentage += v > quant95
+            percentage = 100 * percentage / len(t_values)
+            hypTest += "E(X) <= E(Y): in %.2f%% aller Messungen akzeptiert, in %.2f%% abgelehnt\n" % (100-percentage, percentage)
+            percentage = 0  # how much percent of the measurements contradict the hypothesis
+            for v in t_values:
+                percentage += v < -quant95
+            percentage = 100 * percentage / len(t_values)
+            hypTest += "E(X) >= E(Y): in %.2f%% aller Messungen akzeptiert, in %.2f%% abgelehnt\n" % (100-percentage, percentage)
 
-    return t_value, hypTest
+    arith_t_value = sum(t_values) / len(t_values)
+    return arith_t_value, hypTest
 
 
 def plotBoxed(data: dict, outFileName: str) -> "saves plot as png":
