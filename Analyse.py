@@ -28,15 +28,16 @@ def t_test(dataM1: "measurements Medium 1", dataM2: "measurements Medium 2", t_d
     dataM2 = [dataM2[i*SAMPLES_PER_MED: (i+1)*SAMPLES_PER_MED] for i in range(len(dataM2) // SAMPLES_PER_MED)]
     t_values = []
     for X, Y in zip(dataM1, dataM2):
-        m, n = len(X), len(Y)
-        arithM1 = sum(X) / m
-        arithM2 = sum(Y) / n
-        weightedVariance = (sum([(x - arithM1) ** 2 for x in X]) + sum([(y - arithM2) ** 2 for y in Y])) / (m + n - 2)
-        if weightedVariance == 0:
-            t_values += [0]
-        else:
-            t_values += [(m * n / (m + n)) ** .5 * (arithM1 - arithM2) / (weightedVariance ** .5)]
-    hypTest = ""
+        if sum(X) or sum(Y):  # t-values when both mediums had no grown seeds are skipped
+            m, n = len(X), len(Y)
+            arithM1 = sum(X) / m
+            arithM2 = sum(Y) / n
+            weightedVariance = (sum([(x - arithM1) ** 2 for x in X]) + sum([(y - arithM2) ** 2 for y in Y])) / (m + n - 2)
+            if weightedVariance == 0:
+                t_values += [0]
+            else:
+                t_values += [(m * n / (m + n)) ** .5 * (arithM1 - arithM2) / (weightedVariance ** .5)]
+    hypTest = "Es werden nur Messungen betrachtet, bei denen min. ein Medium Höhen größer 0 aufweist\n"
     if t_dist_value != (None, None):
         quant95, quant975 = t_dist_value
         if quant975:
