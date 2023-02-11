@@ -18,12 +18,18 @@ def main():
 
     normalData = data[MEDIUMS[0]][1]
     print("Degrees of Freedom: %d" % (2 * len(normalData) - 2))
-    for medium in data:
-        t_value, hypTestRes = t_test(normalData, data[medium][1][-len(normalData):], (1.646, 1.962))
-        print("mean t-value for %s and %s: %f\n%s" % (MEDIUMS[0], medium, t_value, hypTestRes))
+    with open("Results/t_tests.csv", "w") as f:
+        f.write("Medium (M);$H_0: E(H2O) = E(M)$;$H_0: E(H2O) <= E(M)$;$H_0: E(H2O) >= E(M)$\n")
+        for medium in data:
+            t_value, hypTestRes, accepted = t_test(normalData, data[medium][1][-len(normalData):], (1.646, 1.962))
+            print("mean t-value for %s and %s: %f\n%s" % (MEDIUMS[0], medium, t_value, hypTestRes))
+            if medium != MEDIUMS[0]:
+                eq, le, ge = accepted
+                f.write("%s;%.2f\\%% akzeptiert;%.2f\\%% akzeptiert;%.2f\\%% akzeptiert\n"\
+                         % (medium, eq, le, ge))
 
 
-def t_test(dataM1: "measurements Medium 1", dataM2: "measurements Medium 2", t_dist_value=(None, None)) -> (float, str):
+def t_test(dataM1: "measurements Medium 1", dataM2: "measurements Medium 2", t_dist_value=(None, None)) -> (float, str, "list of accepted percentages"):
     dataM1 = [dataM1[i*SAMPLES_PER_MED: (i+1)*SAMPLES_PER_MED] for i in range(len(dataM1) // SAMPLES_PER_MED)]
     dataM2 = [dataM2[i*SAMPLES_PER_MED: (i+1)*SAMPLES_PER_MED] for i in range(len(dataM2) // SAMPLES_PER_MED)]
     t_values = []
@@ -38,6 +44,7 @@ def t_test(dataM1: "measurements Medium 1", dataM2: "measurements Medium 2", t_d
             else:
                 t_values += [(m * n / (m + n)) ** .5 * (arithM1 - arithM2) / (weightedVariance ** .5)]
     hypTest = "Es werden nur Messungen betrachtet, bei denen min. ein Medium Höhen größer 0 aufweist\n"
+    accepted = ["not tested", "not tested", "not tested"]
     if t_dist_value != (None, None):
         quant95, quant975 = t_dist_value
         if quant975:
@@ -46,21 +53,24 @@ def t_test(dataM1: "measurements Medium 1", dataM2: "measurements Medium 2", t_d
                 percentage += v > quant975
                 percentage += v < -quant975
             percentage = 100 * percentage / len(t_values)
+            accepted[0] = 100-percentage
             hypTest += "E(X) = E(Y): in %.2f%% aller Messungen akzeptiert, in %.2f%% abgelehnt\n" % (100-percentage, percentage)
         if quant95:
             percentage = 0  # how much percent of the measurements contradict the hypothesis
             for v in t_values:
                 percentage += v > quant95
             percentage = 100 * percentage / len(t_values)
+            accepted[1] = 100-percentage
             hypTest += "E(X) <= E(Y): in %.2f%% aller Messungen akzeptiert, in %.2f%% abgelehnt\n" % (100-percentage, percentage)
             percentage = 0  # how much percent of the measurements contradict the hypothesis
             for v in t_values:
                 percentage += v < -quant95
             percentage = 100 * percentage / len(t_values)
+            accepted[2] = 100-percentage
             hypTest += "E(X) >= E(Y): in %.2f%% aller Messungen akzeptiert, in %.2f%% abgelehnt\n" % (100-percentage, percentage)
 
     arith_t_value = sum(t_values) / len(t_values)
-    return arith_t_value, hypTest
+    return arith_t_value, hypTest, accepted
 
 
 def plotBoxed(data: dict, outFileName: str) -> "saves plot as png":
