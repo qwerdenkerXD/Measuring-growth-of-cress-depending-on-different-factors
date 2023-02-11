@@ -127,7 +127,7 @@ def makeRcompatible(data: dict) -> "writes my_measurements.R":
             y[medium] += [arith/days_measures]
             x[medium] += [day]
 
-    with open("Analyse/my_measurements.csv", "w") as f:
+    with open("Results/my_measurements.csv", "w") as f:
         f.write("Medium,Messtag,Wuchshöhe,Matrikelnummer\n")
         for medium in data:
             xy = sorted(zip(x[medium], y[medium]))

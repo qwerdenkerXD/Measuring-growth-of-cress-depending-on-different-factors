@@ -2,7 +2,7 @@
 
 
 #' Step 1 - Read MY data:
-plant.h.my <- read.table("Analyse/my_measurements.csv", sep = ",", header = TRUE, stringsAsFactors = TRUE)
+plant.h.my <- read.table("Results/my_measurements.csv", sep = ",", header = TRUE, stringsAsFactors = TRUE)
 #' Objects: plant.h.my
 
 
