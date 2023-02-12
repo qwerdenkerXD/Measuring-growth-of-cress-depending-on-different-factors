@@ -1,3 +1,4 @@
-Medium (M);$H_0: E(H2O) = E(M)$;$H_0: E(H2O) <= E(M)$;$H_0: E(H2O) >= E(M)$
-pH;73.08\% akzeptiert;100.00\% akzeptiert;69.23\% akzeptiert
-NaCl;0.00\% akzeptiert;0.00\% akzeptiert;100.00\% akzeptiert
+H$_0$;pH;NaCl
+E(H2O) =  E(M);73.08\% akzeptiert;0.00\% akzeptiert
+E(H2O) $<$= E(M);100.00\% akzeptiert;0.00\% akzeptiert
+E(H2O) $>$= E(M);69.23\% akzeptiert;100.00\% akzeptiert

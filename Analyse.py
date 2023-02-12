@@ -18,15 +18,17 @@ def main():
 
     normalData = data[MEDIUMS[0]][1]
     print("Degrees of Freedom: %d" % (2 * len(normalData) - 2))
+    all_accepted = []
+    for medium in data:
+        t_value, hypTestRes, accepted = t_test(normalData, data[medium][1][-len(normalData):], (1.646, 1.962))
+        print("mean t-value for %s and %s: %f\n%s" % (MEDIUMS[0], medium, t_value, hypTestRes))
+        all_accepted += [accepted]
+
     with open("Results/t_tests.csv", "w") as f:
-        f.write("Medium (M);$H_0: E(H2O) = E(M)$;$H_0: E(H2O) <= E(M)$;$H_0: E(H2O) >= E(M)$\n")
-        for medium in data:
-            t_value, hypTestRes, accepted = t_test(normalData, data[medium][1][-len(normalData):], (1.646, 1.962))
-            print("mean t-value for %s and %s: %f\n%s" % (MEDIUMS[0], medium, t_value, hypTestRes))
-            if medium != MEDIUMS[0]:
-                eq, le, ge = accepted
-                f.write("%s;%.2f\\%% akzeptiert;%.2f\\%% akzeptiert;%.2f\\%% akzeptiert\n"\
-                         % (medium, eq, le, ge))
+        f.write("H$_0$;%s;%s\n" % tuple(MEDIUMS[1:]))
+        f.write("E(H2O) =  E(M);%.2f\\%% akzeptiert;%.2f\\%% akzeptiert\n" % (all_accepted[1][0], all_accepted[2][0]))
+        f.write("E(H2O) $<$= E(M);%.2f\\%% akzeptiert;%.2f\\%% akzeptiert\n" % (all_accepted[1][1], all_accepted[2][1]))
+        f.write("E(H2O) $>$= E(M);%.2f\\%% akzeptiert;%.2f\\%% akzeptiert\n" % (all_accepted[1][2], all_accepted[2][2]))
 
 
 def t_test(dataM1: "measurements Medium 1", dataM2: "measurements Medium 2", t_dist_value=(None, None)) -> (float, str, "list of accepted percentages"):
