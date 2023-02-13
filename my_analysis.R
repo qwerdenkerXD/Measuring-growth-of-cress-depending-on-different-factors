@@ -64,8 +64,8 @@ points(x = plant.h.days, y = sapply(plant.h.days, function(day) {
 points(x = plant.h.days, y = sapply(plant.h.days, function(day) {
     mean(plant.h.my.acidic[which(plant.h.my.acidic$Messtag == day), "Wuchshöhe"], na.rm = TRUE)
 }), pch = "-", col = "darkred", cex = 7)
-legend("topleft", legend = c(c("H2O andere", "NaCl andere", "pH andere"),
-    c("mein H2O", "mein NaCl", "mein pH")), fill = c("black", "skyblue", "orange",
+legend("topleft", legend = c(c("normal (andere)", "salzig (andere)", "sauer (andere)"),
+    c("normal (meins)", "salzig (meins)", "sauer (meins)")), fill = c("black", "skyblue", "orange",
     "darkgrey", "blue", "darkred"))
 dev.off()
 #' Open the new file 'scatterplot_time_series_my_versus_others.pdf' and look at

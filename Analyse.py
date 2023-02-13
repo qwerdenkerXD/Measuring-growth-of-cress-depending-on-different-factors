@@ -214,7 +214,7 @@ def plotScattered(data: dict, outFileName: str) -> "saves plot as png":
 
         for medium in data:
             x_values, y_values = [median, arithMean][i][medium]
-            subP.plot(x_values, y_values, marker="o", linestyle="-", label=medium)
+            subP.plot(x_values, y_values, marker="o", linestyle="-", label=MEDIUM_EQUIV[medium][1])
             subP.legend(loc="upper left", fontsize=15)
 
     plot.savefig("%s%s.png" % (PATH_RESULTS, outFileName))
