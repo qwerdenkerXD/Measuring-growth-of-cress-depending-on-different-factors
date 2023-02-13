@@ -59,7 +59,7 @@ def t_test(dataM1: "measurements Medium 1", dataM2: "measurements Medium 2", plo
 
     def t_dist(t, gammafuncValue1, gammafuncValue2, degOfFreedom):
         from math import pi
-        return gammafuncValue1 / ((degOfFreedom * pi)**.5 * gammafuncValue2) * (1 + t**2/degOfFreedom)**-(degOfFreedom+1)/2
+        return gammafuncValue1 / ((degOfFreedom * pi)**.5 * gammafuncValue2) * (1 + t**2/degOfFreedom)**-((degOfFreedom+1)/2)
 
     hypTest = "Es werden nur Messungen betrachtet, bei denen min. ein Medium Höhen größer 0 aufweist\n"
     accepted = ["nicht getestet", "nicht getestet", "nicht getestet"]
@@ -73,6 +73,7 @@ def t_test(dataM1: "measurements Medium 1", dataM2: "measurements Medium 2", plo
         gamma1, gamma2 = 2.772432e+16, 6.402374e+15  # values for 19.5 ((38+1)/2) and 19 (38/2) from https://miniwebtool.com/de/gamma-function-calculator/
         plotTrange = range(round(min(t_values+[-quant975])*1000 - 500), round(max(t_values+[quant975])*1000 + 500), 10)
         plot.plot([t/1000 for t in plotTrange], [t_dist(t/1000, gamma1, gamma2, 38) for t in plotTrange], marker="", color="black")
+        print(t_dist(0, gamma1, gamma2, 38))
         if quant975:
             percentage = 0  # how much percent of the measurements contradict the hypothesis
             for v in t_values:
