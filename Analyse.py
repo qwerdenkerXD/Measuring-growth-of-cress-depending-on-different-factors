@@ -78,7 +78,7 @@ def t_test(dataM1: "measurements Medium 1", dataM2: "measurements Medium 2", plo
             for v in t_values:
                 percentage += v > quant975
                 percentage += v < -quant975
-                plot.plot(v, t_dist(v, SAMPLES_PER_MED), marker="o", color="blue")
+                plot.plot(v, t_dist(v, 2 * SAMPLES_PER_MED - 2), marker="o", color="blue")
             percentage = 100 * percentage / len(t_values)
             accepted[0] = 100-percentage
             hypTest += "E(X) = E(Y): in %.2f%% aller Messungen akzeptiert, in %.2f%% abgelehnt\n" % (100-percentage, percentage)
