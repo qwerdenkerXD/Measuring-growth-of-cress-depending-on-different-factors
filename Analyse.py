@@ -137,8 +137,8 @@ def plotBoxed(data: dict, outFileName: str) -> "saves plot as png":
             box.set_facecolor("white")
         subP.set_xlim(0, pos[-1]+210)
         subP.set_ylim(-4, MAX_V + 2)
-        subP.set_xticks([i for i in range(0, pos[-1], 60 * 24)])
-        # subP.set_xticklabels([i // (60 * 24) for i in range(0, pos[-1], 60 * 24)], fontsize=15)
+        subP.set_xticks([i for i in range(0, pos[-1] + 60 * 24, 60 * 24)])
+        subP.set_xticklabels([i // (60 * 24) for i in range(0, pos[-1] + 60 * 24, 60 * 24)], fontsize=15)
         for label in subP.get_yticklabels():
             label.set_fontsize(15)
         subP.legend(loc="upper left", fontsize=15)
@@ -204,11 +204,11 @@ def plotScattered(data: dict, outFileName: str) -> "saves plot as png":
         subP.set_title(["Mediane", "Arithmetische Mittelwerte"][i], fontdict={"fontsize": 25})
         plot.xlabel("Zeitpunkt in Tagen", fontsize=20)
         plot.ylabel("Wachstumshöhe in mm", fontsize=20)
-        subP.set_xticks([i for i in range(0, MAX_X, 60 * 24)])
-        subP.set_xticklabels([i // (60 * 24) for i in range(0, MAX_X, 60 * 24)], fontsize=15)
+        subP.set_xticks([i for i in range(0, MAX_X + 60 * 24, 60 * 24)])
+        subP.set_xticklabels([i // (60 * 24) for i in range(0, MAX_X + 60 * 24, 60 * 24)], fontsize=15)
         for label in subP.get_yticklabels():
             label.set_fontsize(15)
-        subP.set_xlim(0, MAX_X)
+        subP.set_xlim(0, (int(MAX_X / (60 * 24))+1) * 60 * 24 + 210)
         subP.set_ylim(0, MAX_Y)
         addWatering(subP)
 
