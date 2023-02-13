@@ -3,7 +3,7 @@ from matplotlib import pyplot as plot
 INIT_DATE = 30, 1, 2023, 10, 27
 CSV_DELIM = ";"
 PATH_RESULTS = "Results/"
-MEDIUM_EQUIV = {"H2O": "Normal", "pH": "Acidic", "NaCl": "Salty"}
+MEDIUM_EQUIV = {"H2O": ["Normal", "Normal"], "pH": ["Acidic", "Sauer (pH ≈ 5)"], "NaCl": ["Salty", "Salzig (0,1 mol NaCl)"]}
 MEDIUMS = list(MEDIUM_EQUIV.keys())
 SAMPLES_PER_MED = 20
 M_COUNT = None  # gets value in getMeasurements()
@@ -17,21 +17,32 @@ def main():
     makeRcompatible(data)  # writes a file for a script from the course
 
     normalData = data[MEDIUMS[0]][1]
-    print("Degrees of Freedom: %d" % (2 * len(normalData) - 2))
+    print("Degrees of Freedom: %d" % (2 * SAMPLES_PER_MED - 2))
     all_accepted = []
-    for medium in data:
-        t_value, hypTestRes, accepted = t_test(normalData, data[medium][1][-len(normalData):], (1.646, 1.962))
+    plot.clf()
+    fig, subplots = plot.subplots(1, len(data)-1)
+    fig.set_size_inches(30, 15)
+    for medium, subP in zip(MEDIUMS[1:], subplots):
+        subP.set_title(MEDIUM_EQUIV[medium][1], fontdict={"fontsize": 25})
+        subP.set_xlabel("t-Wert", fontsize=20)
+        subP.set_ylabel("T(t)", fontsize=20)
+        for x, y in zip(subP.get_yticklabels(), subP.get_xticklabels()):
+            x.set_fontsize(15)
+            y.set_fontsize(15)
+        t_value, hypTestRes, accepted = t_test(normalData, data[medium][1][-len(normalData):], subP, (1.687, 2.025))  # quantile values for alpha=5% from https://datatab.de/tutorial/tabelle-t-verteilung
         print("mean t-value for %s and %s: %f\n%s" % (MEDIUMS[0], medium, t_value, hypTestRes))
         all_accepted += [accepted]
 
+    plot.savefig("%st_tests.png" % PATH_RESULTS)
+
     with open("Results/t_tests.csv", "w") as f:
-        f.write("H$_0$;%s;%s\n" % tuple(MEDIUMS[1:]))
-        f.write("E(H2O) =  E(M);%.2f\\%% akzeptiert;%.2f\\%% akzeptiert\n" % (all_accepted[1][0], all_accepted[2][0]))
-        f.write("E(H2O) $<$= E(M);%.2f\\%% akzeptiert;%.2f\\%% akzeptiert\n" % (all_accepted[1][1], all_accepted[2][1]))
-        f.write("E(H2O) $>$= E(M);%.2f\\%% akzeptiert;%.2f\\%% akzeptiert\n" % (all_accepted[1][2], all_accepted[2][2]))
+        f.write("H0;%s;%s\n" % tuple(MEDIUMS[1:]))
+        f.write("E(Normal) \\ \\ = E(M);%.2f\\%% akzeptiert;%.2f\\%% akzeptiert\n" % (all_accepted[0][0], all_accepted[1][0]))
+        f.write("E(Normal) $<$= E(M);%.2f\\%% akzeptiert;%.2f\\%% akzeptiert\n" % (all_accepted[0][1], all_accepted[1][1]))
+        f.write("E(Normal) $>$= E(M);%.2f\\%% akzeptiert;%.2f\\%% akzeptiert\n" % (all_accepted[0][2], all_accepted[1][2]))
 
 
-def t_test(dataM1: "measurements Medium 1", dataM2: "measurements Medium 2", t_dist_value=(None, None)) -> (float, str, "list of accepted percentages"):
+def t_test(dataM1: "measurements Medium 1", dataM2: "measurements Medium 2", plot, t_dist_value=(None, None)) -> (float, str, "list of accepted percentages"):
     dataM1 = [dataM1[i*SAMPLES_PER_MED: (i+1)*SAMPLES_PER_MED] for i in range(len(dataM1) // SAMPLES_PER_MED)]
     dataM2 = [dataM2[i*SAMPLES_PER_MED: (i+1)*SAMPLES_PER_MED] for i in range(len(dataM2) // SAMPLES_PER_MED)]
     t_values = []
@@ -45,15 +56,29 @@ def t_test(dataM1: "measurements Medium 1", dataM2: "measurements Medium 2", t_d
                 t_values += [0]
             else:
                 t_values += [(m * n / (m + n)) ** .5 * (arithM1 - arithM2) / (weightedVariance ** .5)]
+
+    def t_dist(t, gammafuncValue1, gammafuncValue2, degOfFreedom):
+        from math import pi
+        return gammafuncValue1 / ((degOfFreedom * pi)**.5 * gammafuncValue2) * (1 + t**2/degOfFreedom)**-(degOfFreedom+1)/2
+
     hypTest = "Es werden nur Messungen betrachtet, bei denen min. ein Medium Höhen größer 0 aufweist\n"
-    accepted = ["not tested", "not tested", "not tested"]
+    accepted = ["nicht getestet", "nicht getestet", "nicht getestet"]
     if t_dist_value != (None, None):
         quant95, quant975 = t_dist_value
+        plot.axvline(quant95, color="red", label="95%-Quantil")
+        plot.axvline(-quant95, color="red")
+        plot.axvline(quant975, color="green", label="97,5%-Quantil")
+        plot.axvline(-quant975, color="green")
+        plot.legend(loc="upper left", fontsize=15)
+        gamma1, gamma2 = 2.772432e+16, 6.402374e+15  # values for 19.5 ((38+1)/2) and 19 (38/2) from https://miniwebtool.com/de/gamma-function-calculator/
+        plotTrange = range(round(min(t_values+[-quant975])*1000 - 500), round(max(t_values+[quant975])*1000 + 500), 10)
+        plot.plot([t/1000 for t in plotTrange], [t_dist(t/1000, gamma1, gamma2, 38) for t in plotTrange], marker="", color="black")
         if quant975:
             percentage = 0  # how much percent of the measurements contradict the hypothesis
             for v in t_values:
                 percentage += v > quant975
                 percentage += v < -quant975
+                plot.plot(v, t_dist(v, gamma1, gamma2, 38), marker="o", color="blue")
             percentage = 100 * percentage / len(t_values)
             accepted[0] = 100-percentage
             hypTest += "E(X) = E(Y): in %.2f%% aller Messungen akzeptiert, in %.2f%% abgelehnt\n" % (100-percentage, percentage)
@@ -104,14 +129,16 @@ def plotBoxed(data: dict, outFileName: str) -> "saves plot as png":
     fig.set_size_inches(30, 15)
     for medium, subP in zip(data, plots):
         addWatering(subP)
-        subP.set_title(medium, fontdict={"fontsize": 25})
+        subP.set_xlabel("Zeitpunkt in Tagen", fontsize=20)
+        subP.set_ylabel("Wachstumshöhe in mm", fontsize=20)
+        subP.set_title(MEDIUM_EQUIV[medium][1], fontdict={"fontsize": 25})
         boxP = subP.boxplot(data[medium], positions=pos, widths=400, patch_artist=True)
         for box in boxP["boxes"]:
             box.set_facecolor("white")
         subP.set_xlim(0, pos[-1]+210)
         subP.set_ylim(-4, MAX_V + 2)
         subP.set_xticks([i for i in range(0, pos[-1], 60 * 24)])
-        subP.set_xticklabels([i // (60 * 24) for i in range(0, pos[-1], 60 * 24)], fontsize=15)
+        # subP.set_xticklabels([i // (60 * 24) for i in range(0, pos[-1], 60 * 24)], fontsize=15)
         for label in subP.get_yticklabels():
             label.set_fontsize(15)
         subP.legend(loc="upper left", fontsize=15)
@@ -144,7 +171,7 @@ def makeRcompatible(data: dict) -> "writes my_measurements.R":
         for medium in data:
             xy = sorted(zip(x[medium], y[medium]))
             for xi, yi in xy:
-                f.write("%s,%s,%s,%s\n" % (MEDIUM_EQUIV[medium], xi, yi, 2139315))
+                f.write("%s,%s,%s,%s\n" % (MEDIUM_EQUIV[medium][0], xi, yi, 2139315))
 
 
 def plotScattered(data: dict, outFileName: str) -> "saves plot as png":
@@ -174,7 +201,7 @@ def plotScattered(data: dict, outFileName: str) -> "saves plot as png":
 
     for i in range(2):
         subP = plot.subplot(121 + i)
-        subP.set_title(["median", "arithmetic mean"][i], fontdict={"fontsize": 25})
+        subP.set_title(["Mediane", "Arithmetische Mittelwerte"][i], fontdict={"fontsize": 25})
         plot.xlabel("Zeitpunkt in Tagen", fontsize=20)
         plot.ylabel("Wachstumshöhe in mm", fontsize=20)
         subP.set_xticks([i for i in range(0, MAX_X, 60 * 24)])
@@ -235,7 +262,7 @@ def relTime(dateTime: "dd.mm.yyyy, hh:mm") -> "int of minutes":  # for correct p
 def addWatering(plot) -> None:
     with open("Watering.csv") as f:
         f.readline()
-        label = "Watering"
+        label = "Gießen"
         for line in f:
             dateTime, _ = line.split(CSV_DELIM)
             plot.axvline(relTime(dateTime), label=label)

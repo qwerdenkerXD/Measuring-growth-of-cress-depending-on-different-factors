@@ -1,4 +1,4 @@
-H$_0$;pH;NaCl
-E(H2O) =  E(M);75.00\% akzeptiert;0.00\% akzeptiert
-E(H2O) $<$= E(M);100.00\% akzeptiert;0.00\% akzeptiert
-E(H2O) $>$= E(M);71.43\% akzeptiert;100.00\% akzeptiert
+H0;pH;NaCl
+E(Normal) \ \ = E(M);75.00\% akzeptiert;0.00\% akzeptiert
+E(Normal) $<$= E(M);100.00\% akzeptiert;0.00\% akzeptiert
+E(Normal) $>$= E(M);71.43\% akzeptiert;100.00\% akzeptiert
