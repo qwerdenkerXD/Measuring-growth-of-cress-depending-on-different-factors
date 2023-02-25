@@ -29,7 +29,7 @@ def main():
         for x, y in zip(subP.get_yticklabels(), subP.get_xticklabels()):
             x.set_fontsize(15)
             y.set_fontsize(15)
-        t_value, hypTestRes, accepted = t_test(normalData, data[medium][1][-len(normalData):], subP, (1.687, 2.025))  # quantile values for alpha=5% from https://datatab.de/tutorial/tabelle-t-verteilung
+        t_value, hypTestRes, accepted = t_test(normalData, data[medium][1][-len(normalData):], subP, (1.686, 2.024))  # quantile values for alpha=5% from https://datatab.de/tutorial/tabelle-t-verteilung
         print("mean t-value for %s and %s: %f\n%s" % (MEDIUMS[0], medium, t_value, hypTestRes))
         all_accepted += [accepted]
 
@@ -45,6 +45,7 @@ def main():
 def t_test(dataM1: "measurements Medium 1", dataM2: "measurements Medium 2", plot, t_dist_value=(None, None)) -> (float, str, "list of accepted percentages"):
     dataM1 = [dataM1[i*SAMPLES_PER_MED: (i+1)*SAMPLES_PER_MED] for i in range(len(dataM1) // SAMPLES_PER_MED)]
     dataM2 = [dataM2[i*SAMPLES_PER_MED: (i+1)*SAMPLES_PER_MED] for i in range(len(dataM2) // SAMPLES_PER_MED)]
+    degOfFreedom = len(dataM1[0]) + len(dataM2[0]) - 2
     t_values = []
     for X, Y in zip(dataM1, dataM2):
         if sum(X) or sum(Y):  # t-values when both mediums had no grown seeds are skipped
@@ -63,6 +64,7 @@ def t_test(dataM1: "measurements Medium 1", dataM2: "measurements Medium 2", plo
 
     hypTest = "Es werden nur Messungen betrachtet, bei denen min. ein Medium Höhen größer 0 aufweist\n"
     accepted = ["nicht getestet", "nicht getestet", "nicht getestet"]
+
     if t_dist_value != (None, None):
         quant95, quant975 = t_dist_value
         plot.axvline(quant95, color="red", label="95%-Quantil")
@@ -71,14 +73,14 @@ def t_test(dataM1: "measurements Medium 1", dataM2: "measurements Medium 2", plo
         plot.axvline(-quant975, color="green")
         plot.legend(loc="upper left", fontsize=15)
         plotTrange = range(round(min(t_values+[-quant975])*1000 - 500), round(max(t_values+[quant975])*1000 + 500), 10)
-        plot.plot([t/1000 for t in plotTrange], [t_dist(t/1000, 2 * SAMPLES_PER_MED - 2) for t in plotTrange], marker="", color="black")
+        plot.plot([t/1000 for t in plotTrange], [t_dist(t/1000, degOfFreedom) for t in plotTrange], marker="", color="black")
 
         if quant975:
             percentage = 0  # how much percent of the measurements contradict the hypothesis
             for v in t_values:
                 percentage += v > quant975
                 percentage += v < -quant975
-                plot.plot(v, t_dist(v, 2 * SAMPLES_PER_MED - 2), marker="o", color="blue")
+                plot.plot(v, t_dist(v, degOfFreedom), marker="o", color="blue")
             percentage = 100 * percentage / len(t_values)
             accepted[0] = 100-percentage
             hypTest += "E(X) = E(Y): in %.2f%% aller Messungen akzeptiert, in %.2f%% abgelehnt\n" % (100-percentage, percentage)

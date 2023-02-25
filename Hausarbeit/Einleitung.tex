@@ -1,0 +1,22 @@
+\section{Einleitung}
+\begin{table}
+    \centering
+    \caption{t-Test-Ergebnisse}
+    \label{tab:t_test}
+    \begin{tabular}{rrr}
+        \toprule
+        \multicolumn{1}{c}{\bfseries Nullhypothese} & \multicolumn{1}{c}{\bfseries Sauer} & \multicolumn{1}{c}{\bfseries Salzig} \\ 
+        \midrule
+        \csvreader[%tabular=rrr,
+          /csv/separator=semicolon,
+          head to column names,
+          late after line=\\,
+          column count=3,
+          ]%
+          {../Results/t_tests.csv}{H0=\H, pH=\pH, NaCl=\NaCl}%
+        {\H & \pH & \NaCl}
+        \bottomrule
+    \end{tabular}
+\end{table}
+Wie in Tabelle~\ref{tab:t_test} zu sehen ist, \dots
+\cite{aristotle:physics}. Die Quantile sind bla und bla\cite[.vgl][]{web:t-values}
