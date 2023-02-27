@@ -1,10 +1,10 @@
-Material;Quantity;Usage
-tea spoon;3;watering samples
-piped water from Bingen am Rhein;2,9955 liter;creating watering solutions
-vinegar;4,5 milliliter;creating watering solutions
-salt;5,85 grams;creating watering solutions
-cotton;3 * 30 grams;soil for cress
-cress seed;3 * 20;samples
-tea cup;3 * 350 ml;stores soil
-measuring cup (1 l);1;creating watering solutions
-closable glass;3;storing watering solutions
+Material;Menge;Zweck;Zusatzinfo
+Teel\\o ffel;3;Gie\\ss en;Reinigung nach Nutzung
+Leitungswasser;2,9955 l;Herstellung Medien;aus Bingen am Rhein
+Essig;4,5 ml;Herstellung Medien;pH = 2,65
+Salz;5,85 g;Herstellung Medien;
+Wolle;3 * 30 g;Wuchsboden;100% Baumwolle
+Kressesamen;3 * 20;Testobjekte; 
+Tasse;3 * 350 ml;Blumentopf; 
+Messbecher;1 * 1l;Herstellung Medien;Reinigung nach Nutzung
+verschlie\\ss bares Glas;3;Gef\\a \\ss Medien; 

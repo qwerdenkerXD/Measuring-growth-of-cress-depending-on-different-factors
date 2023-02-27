@@ -1,27 +1,30 @@
 \input{Preamble}
 
+
 \begin{document}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+% \addtolength{\oddsidemargin}{-1cm}
+% \setlength{\topmargin}{2cm}
+% \setlength{\textwidth}{16cm}
+% \setlength{\textheight}{\numexpr\paperheight-4cm\relax}
 
 \maketitle
 \thispagestyle{empty}
 \newpage
 \pagenumbering{Roman}
-\tableofcontents
 \newpage
-\input{Abstract}
-\newpage
-\pagenumbering{arabic}
-
-\input{Einleitung}
-\input{Hauptteil}
-\input{Schluss}
-
-\newpage
-\pagenumbering{Roman}
-\setcounter{page}{3}
 \printbibliography
 \newpage
 \listoffigures
 \newpage
 \listoftables
+\tableofcontents
+\include{Abstract}
+\pagenumbering{arabic}
+
+\include{Einleitung}
+\include{Hauptteil}
+\include{Schluss}
+
 \end{document}
