@@ -1,39 +1,32 @@
 \section{Material und Methoden} % (fold)
 \label{sec:material_und_methoden}
-    Es werden drei Versuchsmedien erstellt, um das Wachstum differenziert betrachten zu können. Dabei wird eines mit normalem Leitungswasser gewässert, eines mit Salzwasser und eines mit angesäuertem Wasser. Der Salzgehalt soll bei $0,1 \frac{mol}{l}$ liegen. Dementsprechend wird dazu ein Liter Leitungswasser mit 5,85g NaCl gemischt, wie der Berechnung~\ref{equ:nacl} zu entnehmen ist.
-    \begin{equation}\label{equ:nacl}
-        m(NaCl) = 0,1\frac{mol}{l} * V(H_2O) * M(NaCl)
-        = 0,1\frac{mol}{l} * 1l * 58,5\frac{g}{mol}
+    % Es werden drei Versuchsmedien erstellt, um das Wachstum differenziert betrachten zu können. Dabei wird eines mit normalem Leitungswasser gewässert, eines mit Salzwasser und eines mit angesäuertem Wasser. Der Salzgehalt soll bei $0,1 \frac{mol}{l}$ liegen. Dementsprechend wird dazu ein Liter Leitungswasser mit 5,85g NaCl gemischt, wie der Berechnung~\ref{equ:nacl} zu entnehmen ist.
+    % \begin{equation}\label{equ:nacl}
+        % m(NaCl) = 0,1\frac{mol}{l} * V(H_2O) * M(NaCl)
+        % = 0,1\frac{mol}{l} * 1l * 58,5\frac{g}{mol}
         % \begin{aligned}
             
         % = 5,85g
         % \end{aligned}
-    \end{equation}
+    % \end{equation}
     % \begin{equation}
     %     \label{equ:essig}
     %         pH(Essig) = 2,65
     %         \Rightarrow c(H^+)=
     %         = 5,85g
     % \end{equation}
-    % \begin{table}
-    %     \centering
-    %     \caption{Materialien}
-    %     \label{tab:materials}
-    %     \begin{tabular}{rrrr}
-    %         \toprule
-    %         \multicolumn{1}{c}{\bfseries Material} & \multicolumn{1}{c}{\bfseries Menge} & \multicolumn{1}{c}{\bfseries Zweck} & \multicolumn{1}{c}{\bfseries Zusatzinfo}\\ 
-    %         \midrule
-    %         \csvreader[respect percent,
-    %           /csv/separator=semicolon,
-    %           head to column names,
-    %           late after line=\\,
-    %           column count=4,
-    %           ]%
-    %           {../Materials.csv}{Material=\Material, Menge=\Menge, Zweck=\Zweck, Zusatzinfo=\Zusatzinfo}%
-    %         {\Material & \Menge & \Zweck & \Zusatzinfo}
-    %         \bottomrule
-    %     \end{tabular}
-    % \end{table}
+    \begin{table}
+        \caption{Materialien}
+        \label{tab:materials}
+        \csvreader[tabular=rrrr,
+            respect percent,
+            table head=\toprule\textbf{Material} & \textbf{Menge} & \textbf{Zweck} & \textbf{Zusatzinfo}\\\midrule,
+            /csv/separator=semicolon,
+            head to column names,
+            late after last line=\\\bottomrule]
+            {../Materials.csv}{}
+            {\Material&\Menge&\Zweck&\Zusatzinfo}
+    \end{table}
     \subsection{Durchführung} % (fold)
     \label{sub:durchführung}
     
@@ -55,11 +48,10 @@
               /csv/separator=semicolon,
               head to column names,
               late after line=\\,
-              column count=3,
+              late after last line=\\\bottomrule
               ]%
-              {../Results/t_tests.csv}{H0=\H, pH=\pH, NaCl=\NaCl}%
+              {../Results/t_tests.csv}{H0=\H}%
             {\H & \pH & \NaCl}
-            \bottomrule
         \end{tabular}
     \end{table}
     Wie in Tabelle~\ref{tab:t_test} zu sehen ist, \dots
