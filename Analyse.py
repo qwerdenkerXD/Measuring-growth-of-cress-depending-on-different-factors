@@ -37,9 +37,9 @@ def main():
 
     with open("Results/t_tests.csv", "w") as f:
         f.write("H0;%s;%s\n" % tuple(MEDIUMS[1:]))
-        f.write("E(Normal) \\ \\ = E(M);%.2f\\%% akzeptiert;%.2f\\%% akzeptiert\n" % (all_accepted[0][0], all_accepted[1][0]))
-        f.write("E(Normal) $<$= E(M);%.2f\\%% akzeptiert;%.2f\\%% akzeptiert\n" % (all_accepted[0][1], all_accepted[1][1]))
-        f.write("E(Normal) $>$= E(M);%.2f\\%% akzeptiert;%.2f\\%% akzeptiert\n" % (all_accepted[0][2], all_accepted[1][2]))
+        f.write("E(Normal) \\ \\ = E(M);%.2f%% akzeptiert;%.2f%% akzeptiert\n" % (all_accepted[0][0], all_accepted[1][0]))
+        f.write("E(Normal) $<$= E(M);%.2f%% akzeptiert;%.2f%% akzeptiert\n" % (all_accepted[0][1], all_accepted[1][1]))
+        f.write("E(Normal) $>$= E(M);%.2f%% akzeptiert;%.2f%% akzeptiert\n" % (all_accepted[0][2], all_accepted[1][2]))
 
 
 def t_test(dataM1: "measurements Medium 1", dataM2: "measurements Medium 2", plot, t_dist_value=(None, None)) -> (float, str, "list of accepted percentages"):
