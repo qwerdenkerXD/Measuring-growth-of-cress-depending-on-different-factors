@@ -9,7 +9,6 @@
         \end{split}
     \end{equation}
     Das saure Medium soll einen pH-Wert von 5 haben. Zur Verfügung steht Essigessenz mit dem pH-Wert 2,65, sodass von dieser 4,5ml zu einem Liter aufgefüllt werden (siehe Berechnung~\ref{equ:essig}).
-    % Whyever funktioniert die Referenz zu equ:nacl nicht, wenn die folgende equation existiert -> debuggen
     \begin{equation}
         \label{equ:essig}
         \begin{split}
@@ -17,10 +16,10 @@
             \Rightarrow c(H^+)_{alt} &=10^{-2,65}\\
             c(H^+)_{neu}&=10^{-5}=10^{-2,65} * x * l\\
             x&=0,0045l
-            % &&= 5,85g
+            % &&= 5,85
         \end{split}
     \end{equation}
-    \begin{table}
+    \begin{table}[h]
         \caption{Materialien}
         \label{tab:materials}
         \csvreader[tabular=rrrr,
@@ -38,23 +37,24 @@
     % subsection durchführung (end)
 % section material_und_methoden (end)
 
+\newpage
 \section{Ergebnisse} % (fold)
     \label{sec:ergebnisse}
+    Text
 
-    \begin{table}
+    \begin{table}[h]
         \centering
         \caption{t-Test-Ergebnisse}
         \label{tab:t_test}
         \csvreader[tabular=rrr,
-          respect percent,
           table head=\toprule\centerIt{\textbf{Nullhypothese}} & \centerIt{\textbf{Sauer}} & \centerIt{\textbf{Salzig}}\\\midrule,
           /csv/separator=semicolon,
           head to column names,
+          late after line=\\,
           late after last line=\\\bottomrule
           ]%
           {../Results/t_tests.csv}{H0=\H}%
         {\H & \pH & \NaCl}
     \end{table}
-    Wie in Tabelle~\ref{tab:t_test} zu sehen ist, \dots
-    \cite{aristotle:physics}. Die Quantile sind bla und bla\ \cite[vgl.][]{web:t-values} und bla\ \cite[vgl.][]{web:Gartenratgeber}
+    Wie in Tabelle~\ref{tab:t_test} zu sehen ist, \dots Die Quantile sind bla und bla\ \cite[vgl.][]{web:t-values} und bla\ \cite[vgl.][]{web:Gartenratgeber}
 % section ergebnisse (end)
