@@ -5,16 +5,25 @@
 % \purpose{Prüfungsleistung WIAS}
 \date{\the\day.\the\month.\the\year}
 
+\usepackage[english, ngerman]{babel}
 \usepackage[backend=biber,style=alphabetic,]{biblatex}
-\usepackage[utf8]{inputenc}
-\usepackage{csvsimple}
+\usepackage[utf8]{inputenc}  % necessary for csvsimple to read files in utf-8
+\usepackage{csvsimple}  % for generating tables from csv
 \usepackage{blindtext}
 \usepackage{booktabs}
 \usepackage[addtotoc]{abstract}
-% \usepackage{csquotes}
 \usepackage{amsmath}
-\usepackage[english, ngerman]{babel}
+\usepackage{graphicx}
+\graphicspath{ {../Results/} }
+\usepackage{hyperref}  % for clickable references when citing or referring to labels
 
 \bibliography{Literatur}
 
 \newcommand{\centerIt}[1]{\hspace*{\fill} #1 \hspace*{\fill}}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+% \addtolength{\oddsidemargin}{-1cm}
+% \setlength{\topmargin}{2cm}
+% \setlength{\textwidth}{16cm}
+% \setlength{\textheight}{\numexpr\paperheight-4cm\relax}

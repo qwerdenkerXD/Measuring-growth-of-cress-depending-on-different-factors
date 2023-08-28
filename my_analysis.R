@@ -68,5 +68,3 @@ legend("topleft", legend = c(c("normal (andere)", "salzig (andere)", "sauer (and
     c("normal (meins)", "salzig (meins)", "sauer (meins)")), fill = c("black", "skyblue", "orange",
     "darkgrey", "blue", "darkred"))
 dev.off()
-#' Open the new file 'scatterplot_time_series_my_versus_others.pdf' and look at
-#' the scientific plot!
