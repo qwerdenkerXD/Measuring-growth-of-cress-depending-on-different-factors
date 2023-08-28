@@ -29,7 +29,7 @@ def main():
         for x, y in zip(subP.get_yticklabels(), subP.get_xticklabels()):
             x.set_fontsize(15)
             y.set_fontsize(15)
-        t_value, hypTestRes, accepted = t_test(normalData, data[medium][1][-len(normalData):], subP, (1.686, 2.024))  # quantile values for alpha=5% from https://datatab.de/tutorial/tabelle-t-verteilung
+        t_value, hypTestRes, accepted = t_test(normalData, data[medium][1][-len(normalData):], subP, (1.686, 2.024))  # quantile values for alpha=5% https://www.statistik.tu-dortmund.de/fileadmin/user_upload/Lehrstuehle/Oekonometrie/Lehre/WiSoOekoSS16/tabelletV.pdf
         print("mean t-value for %s and %s: %f\n%s" % (MEDIUMS[0], medium, t_value, hypTestRes))
         all_accepted += [accepted]
 

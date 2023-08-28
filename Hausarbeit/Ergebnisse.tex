@@ -1,7 +1,5 @@
 \section{Ergebnisse} % (fold)
     \label{sec:ergebnisse}
-    Text
-
     \begin{table}[h]
         \centering
         \caption{t-Test-Ergebnisse}
@@ -16,24 +14,51 @@
           {../Results/t_tests.csv}{H0=\H}%
         {\H & \pH & \NaCl}
     \end{table}
-    Wie in \autoref{tab:t_test} zu sehen ist, \dots Die Quantile sind bla und bla\ \cite[vgl.][]{web:t-values} und bla\ \cite[vgl.][]{web:Gartenratgeber}\\
 
-    \begin{figure}[ht]
+    \begin{figure}[h]
         \includegraphics[width=1\textwidth]{t_tests.png}
         \caption{t-Tests}
         \label{fig:t_tests}
     \end{figure}
-    asdasdasdasdasdasd\newpage
+    In \autoref{tab:t_test} und \autoref{fig:t_tests} sind die Ergebnisse der t-Tests gegenüber des neutralen Mediums dargestellt, tabellarisch und graphisch. Als Signifikanzniveau wurde hierfür ein \( \alpha \) von 5\% gewählt und dementsprechend für die Werte der t-Verteilung bei 38 Freiheitsgraden für einseitige Betrachtung 1,686 und die Zweiseitige 2,024\ \cite[vgl.][]{web:t-values}.
+    \newpage
 
-    \begin{figure}[ht]
-        \includegraphics[width=1\textwidth]{ScatterPlot.png}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=.7\textwidth]{ScatterPlot.png}
         \caption{Messwerte}
         \label{fig:scat_plot}
-    \end{figure}\newpage
+    \end{figure}
+    In \autoref{fig:scat_plot} ist die zeitliche Entwicklung der Wuchshöhen dargestellt, einschließlich wann die Proben gegossen wurden, einmal in Betrachtung der Mediane (links) und rechts mit Fokus auf das arithmetische Mittel aller Höhen eines Mediums. Pflanzen, die durch vorzeitiges Eingehen zu NA-Werten führten, wurden nach dem Absterben mit ihrer letzten validen Höhe gewertet.
 
-    \begin{figure}[ht]
-        \includegraphics[width=1\textwidth]{scatterplot_my_vs_others.png}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=.55\textwidth]{scatterplot_my_vs_others.png}
         \caption{Wertevergleich mit anderen Durchführungen}
         \label{fig:scat_plot_cmp}
     \end{figure}
+    In \autoref{fig:scat_plot_cmp} sind alle Messwerte graphisch dargestellt, zusammen mit den Werten aus parallel von anderen Wissenschaftlern durchgeführten Experimenten gleicher Art, als vergleichende Referenz. Hierbei sind die Mittelwerte als dickere Striche abgebildet.
+    \newpage
+
+    \begin{figure}[h]
+        \centering
+        \begin{subfigure}{.32\textwidth}
+            \includegraphics[width=.7\textwidth]{normal_after.png}
+            \caption{Normal}
+            \label{fig:normal_after}
+        \end{subfigure}
+        \begin{subfigure}{.32\textwidth}
+            \includegraphics[width=.7\textwidth]{salty_after.png}
+            \caption{Salzig}
+            \label{fig:salty_after}
+        \end{subfigure}
+        \begin{subfigure}{.32\textwidth}
+            \includegraphics[width=.7\textwidth]{acidic_after.png}
+            \caption{Sauer}
+            \label{fig:acidic_after}
+        \end{subfigure}
+        \caption{Pflanzen am letzten Tag}
+        \label{fig:exp_after}
+    \end{figure}
+    \autoref{fig:exp_after} zeigt die Pflanzen der jeweiligen Medien am letzten Tag des Experiments.
 % section ergebnisse (end)
