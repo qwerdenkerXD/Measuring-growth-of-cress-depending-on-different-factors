@@ -11,6 +11,7 @@ cp -r my_analysis.R tmp/Supplement
 cp -r *.csv tmp/Supplement
 cd tmp
 rm -r Supplement/tmp
+rm Supplement/Analyse/*.*
 zip -r -m -q ../$filename.zip *
 cd ..
 rm -r tmp
