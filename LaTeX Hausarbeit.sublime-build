@@ -1,4 +1,4 @@
 {
     "shell_cmd": "wsl --cd \"${file_path:${folder}}\" pdflatex --shell-escape -halt-on-error \"Hausarbeit.tex\" && wsl --cd \"${file_path:${folder}}\" biber \"Hausarbeit\" && wsl --cd \"${file_path:${folder}}\" pdflatex --shell-escape -halt-on-error \"Hausarbeit.tex\" && wsl --cd \"${file_path:${folder}}\" pdflatex --shell-escape -halt-on-error \"Hausarbeit.tex\" && wsl --cd \"${file_path:${folder}}\" mv \"Hausarbeit.pdf\" .. && wsl --cd \"${file_path:${folder}}\" rm *.run.xml *.aux *.bbl *.bcf *.blg *.out *.lot *.lof *.toc *.log && \"../Hausarbeit.pdf\"",
-    "file_patterns": ["Preamble.tex","Hausarbeit.tex","Abstract.tex","Einleitung.tex","Material_und_Methoden.tex","Ergebnisse.tex","Diskussion.tex","Literatur.bib"],
+    "file_patterns": ["Preamble.tex","Hausarbeit.tex","Abstract.tex","Einleitung.tex","Material_und_Methoden.tex","Ergebnisse.tex","Diskussion.tex","commands.tex","Literatur.bib"],
 }

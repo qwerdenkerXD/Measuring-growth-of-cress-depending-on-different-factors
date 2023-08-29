@@ -1,0 +1,21 @@
+\newcommand{\Author}{Franz-Eric Sill}
+\newcommand{\centerIt}[1]{\hspace*{\fill} #1 \hspace*{\fill}}  % used in table headers
+
+\newcommand{\declaration}[2]{
+    \leavevmode%
+    \vfill\noindent
+    \begin{center}
+      \textbf{#1}
+    \end{center}
+    #2
+
+    \vspace*{4em}\noindent
+    \hfill%
+    \begin{tabular}[t]{c}
+      \rule{10em}{0.4pt}\\ Unterschrift
+    \end{tabular}%
+    \hfill%
+    \begin{tabular}[t]{c}
+      \rule{10em}{0.4pt}\\ Ort und Datum
+    \end{tabular}%
+    \hfill\strut\par}

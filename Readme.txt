@@ -24,6 +24,7 @@ Folgend sind alle Abhängigkeiten aufgelistet, die während der gesamten Arbeit 
             apt 2.0.9
             rm 8.30
             mv 8.30
+            mkdir 8.30
             git 2.25.1
             zip 3.0
             unzip 6.00
