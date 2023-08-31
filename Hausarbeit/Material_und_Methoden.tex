@@ -37,13 +37,13 @@
 
     In \texttt{Wuchshohen.csv} werden die täglich gemessenen Höhen eingetragen. Die erste Spalte enthält dabei die Bezeichnung des Mediums, die zweite den Messtag des Formats ``TT.MM.YYYY, hh:mm'' (T=Tag, M=Monat, Y=Jahr, h=Stunde, m=Minute), die dritte die gemessene Wuchshöhe in mm (NA wenn Pflanze abgestorben) und die vierte Spalte meine Matrikelnummer.
 
-    In \texttt{Watering.csv} werden die Bewässerungszeiten erfasst. Die erste Spalte enthält den Zeitpunkt in demselben Format wie der zweiten Spalte der Datei für die Wuchshöhen, die zweite Spalte erfasst die Gießmenge an Medium in Teelöffeln.
+    In \texttt{Watering.csv} werden die Bewässerungszeiten erfasst. Die erste Spalte enthält den Zeitpunkt in demselben Format wie der zweiten Spalte der Datei für die Wuchshöhen, die zweite Spalte erfasst die Gießmenge an Medium in Teelöffeln. Pro Tag werden die Pflanzen genau ein Mal gegossen.
 
     Die Datei \texttt{Materials.csv} dient der Auflistung aller verwendeten Materialien, die für die Durchführung des Experiments notwendig gewesen sind. Diese Datei ist die exakte Vorlage für \autoref{tab:materials}.
 
     Für die Analyse der erfassten Daten liegen in \texttt{Supplement} zwei Skripte vor. Diese sind für die Erstellung aller Abbildungen und Tabellen in \autoref{sec:ergebnisse} zuständig und legen die generierten Dateien in \texttt{Supplement/Results} ab, abgesehen von \texttt{preparation.png} (\autoref{fig:exp_prep}) und derer mit dem Suffix \texttt{\_after.png} (\autoref{fig:exp_after}), welche eigene Fotoaufnahmen sind.
 
-    Das Eine ist ein R-Skript mit dem Suffix \texttt{.R}, welches die in diesem Experiment erfassten Daten mit Referenzwerten vergleichend graphisch darstellt (siehe \autoref{fig:scat_plot_cmp}) und in \texttt{scatterplot\_my\_vs\_others.png} speichert. Als Referenzdaten werden alle Dateien aus \texttt{Supplement/Analyse/measurements\_other\_students} verwendet. Diese stammen aus Experimenten gleicher Art, die parallel stattgefunden haben und haben die gleiche Funktion wie \texttt{Wuchshohen.csv}. Zudem wird \texttt{Supplement/Results/my\_measurements.csv} verwendet, welche vom anderen Skript generiert wird. Bei dieser Datei handelt es sich um eine angepasste Version von \texttt{Wuchshohen.csv}, welche den Referenzdateien gleicht, die einen weniger exakten Messtag erfassen.
+    Das Eine ist ein R-Skript mit dem Suffix \texttt{.R}, welches die in diesem Experiment erfassten Daten mit Referenzwerten vergleichend graphisch darstellt (siehe \autoref{fig:scat_plot_cmp}) und in \texttt{scatterplot\_my\_vs\_others.png} speichert. Als Referenzdaten werden alle Dateien aus \texttt{Supplement/Analyse/measurements\_other\_students} verwendet. Diese stammen aus Experimenten gleicher Art, die parallel stattgefunden haben und haben die gleiche Funktion wie \texttt{Wuchshohen.csv}. Zudem wird \texttt{Supplement/Results/my\_measurements.csv} verwendet, welche vom anderen Skript generiert wird. Bei dieser Datei handelt es sich um eine angepasste Version von \texttt{Wuchshohen.csv}, welche den Referenzdateien gleicht, die einen weniger exakten Messzeitpunkt erfassen.
 
     Das andere Skript, das mit \texttt{.py} endet, ist ein python-Skript. Neben \texttt{my\_measurements.csv} erstellt es zudem alle anderen, noch nicht genannten, Dateien, die sich in dem \texttt{Results}-Ordner befinden. Dieses Skript ist nur abhängig von \texttt{Wuchshohen.csv} und \texttt{Watering.csv}. Zudem verwendet es das python-Modul \texttt{matplotlib}.
 
@@ -64,7 +64,7 @@
 
         Für die Herstellung des sauren Mediums wird der Messbecher zwei mal gründlich ausgespült und diesem dann darauffolgend das abgemessene Essig zugegeben. Dieses befand sich in einem separaten 156 ml Gefäß, welches vor der Nutzung auch gereinigt wurde und nun mit LW halb aufgefüllt, geschwenkt, und auch in den Messbecher geleert wird, um Restflüssigkeit mitzunehmen. Der Messbecher wird nun geschwenkt, zu einem Liter aufgefüllt und dessen Inhalt folglich in das dritte Gefäß für das saure Medium gefüllt.
 
-        Die eindeutig voneinander unterscheidbaren Gläser mit entsprechenden Medien werden hinter ihre zugehörigen Tassen gestellt (siehe \autoref{fig:exp_prep}).
+        Die eindeutig voneinander unterscheidbaren Gläser mit entsprechenden Medien werden verschlossen hinter ihre zugehörigen Tassen gestellt (siehe \autoref{fig:exp_prep}).
         \begin{figure}[h]
             \centering
             \includegraphics[width=.7\textwidth]{preparation.png}
@@ -73,7 +73,7 @@
         \end{figure}
 
         \newpage
-        An jedem Messtag, einschließlich Tag 0, werden dieselben Schritte in derselben Reihenfolge durchgeführt.
+        An jedem Messtag, einschließlich Tag 0, werden dieselben Schritte in derselben Reihenfolge durchgeführt, wobei Schritt 2 und 3 je Probe nur genau ein Mal pro Tag durchgeführt werden.
         \begin{enumerate}[1.]
             \item Messen und notieren der Wuchshöhen jedes einzelnen Samens der neutralen Probe mit dem Maßband
             \item gleichmäßiges Gießen des Samenrasters mit drei Teelöffeln aus dem neutralen Medium

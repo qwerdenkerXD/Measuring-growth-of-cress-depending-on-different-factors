@@ -29,7 +29,8 @@ Reproduktion der erfassten Daten:
     begrenzt wird. Auf dieser Oberfläche werden nun Samen von Gartenkresse in einem
     5 * 4 Raster mittels Pinzette positioniert mit etwa 1 cm Abstand zwischen den
     Samen. Anschließend werden drei verschließbare Gläser bereitgestellt, mit
-    mindestens 1 Liter Fassungsvermögen. Dass erste Glas wird voll mit Leitungswasser
+    mindestens 1 Liter Fassungsvermögen, die schon mal für die Aufbewahrung von
+    Lebensmitteln benutzt wurden. Das erste Glas wird voll mit Leitungswasser
     aufgefüllt, welches dieselbe Zusammensetzung hat wie am 30.01.2023 in Bingen
     am Rhein in Deutschland. Das Wasser dieser Art wird auch für die folgenden
     Schritte benutzt. Anschließend wird das Salz in das nächste leere Glas gegeben.
@@ -128,7 +129,7 @@ direkt oder indirekt verwendet wurden:
 
         indirekt:
             starship 1.14.2 (via cargo)
-            oh-my-zsh (via git) (repo ohmyzsh/ohmyzsh at commit 03a0d5b)
+            oh-my-zsh (via git) (GitHub repo ohmyzsh/ohmyzsh at commit 03a0d5b)
                 aktive plugins:
                     alias-finder
                     autojump
@@ -145,7 +146,7 @@ direkt oder indirekt verwendet wurden:
                     git-auto-fetch
                     history
                     ubuntu
-                    zsh-syntax-highlighting (via git) (repo zsh-users/zsh-syntax-highlighting at commit 1386f12)
+                    zsh-syntax-highlighting (via git) (GitHub repo zsh-users/zsh-syntax-highlighting at commit 1386f12)
             dockerd 20.10.25
 
     Prozessor: i5-10500H
