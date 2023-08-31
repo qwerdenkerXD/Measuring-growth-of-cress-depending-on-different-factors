@@ -1,3 +1,6 @@
+Name: Franz-Eric Sill
+Matrikelnummer: 2139315
+
 Reproduktion der aus den erfassten Daten produzierten Ergebnisse:
     Für die Generierung der Ergebnisse und der Hausarbeit müssen folgende Linux
     Befehle in diesem Supplement-Ordner ausgeführt werden:
